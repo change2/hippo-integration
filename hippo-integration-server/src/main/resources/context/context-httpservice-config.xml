@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="httpServiceConverter"
+		class="org.change.hippo.server.parser.strategy.HttpServiceConverter"/>
+
+	<bean id="httpServiceParser" class="org.change.hippo.server.parser.file.PropertiesParser">
+		<property name="path" value="classpath*:config/http-service/http-service-*.properties"/>
+		<property name="serviceConverter" ref="httpServiceConverter"/>
+	</bean>
+
+	<bean id="httpServiceConfig"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="httpServiceParser"/>
+		<property name="targetMethod" value="parse"/>
+	</bean>
+
+	<bean id="httpServicePoolFactory"
+		class="org.change.hippo.server.factory.http.HttpServicePoolFactory"/>
+
+	<bean id="httpServicePool"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="httpServicePoolFactory"/>
+		<property name="targetMethod" value="create"/>
+		<property name="arguments" ref="httpServiceConfig"/>
+	</bean>
+
+</beans>

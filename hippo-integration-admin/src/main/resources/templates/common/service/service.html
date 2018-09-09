@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="common:service:add" type="button"
+								class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
+							</button>
+							<button shiro:hasPermission="common:service:batchRemove"
+								type="button" class="btn  btn-danger" onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除
+							</button>
+							<button shiro:hasPermission="common:service:publish"
+									type="button" class="btn  btn-info" onclick="publish()">
+								<i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;发布
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="serviceId" type="text" class="form-control"
+								   placeholder="serviceId/domain/服务类型/描述">
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+	<div>
+		<script type="text/javascript">
+			var s_edit_h = 'hidden';
+			var s_remove_h = 'hidden';
+			var s_resetPwd_h = 'hidden';
+		</script>
+	</div>
+	<div shiro:hasPermission="common:service:edit">
+		<script type="text/javascript">
+			s_edit_h = '';
+		</script>
+	</div>
+	<div shiro:hasPermission="common:service:remove">
+		<script type="text/javascript">
+			var s_remove_h = '';
+		</script>
+	</div>
+	<div shiro:hasPermission="common:service:add">
+		<script type="text/javascript">
+			var s_add_h = '';
+		</script>
+	</div>
+
+	</div>
+	<div th:include="include :: footer"></div>
+	<link rel="stylesheet" href="css/bootstrap-table-fixed-columns.css">
+	<script type="text/javascript"
+			src="/js/plugins/bootstrap-table/bootstrap-table-fixed-columns.js"></script>
+	<script type="text/javascript"
+		src="/js/appjs/common/service/service.js"></script>
+
+</body>
+<style type="text/css">
+	.minWidth150{
+		min-width:150px;
+	}
+	.minWidth100{
+		min-width:100px;
+	}
+	.minWidth200{
+		 min-width:200px;
+	 }
+</style>
+</html>

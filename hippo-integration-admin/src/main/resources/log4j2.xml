@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <!-- 定义资源公共变量 可以直接使用 -->
+    <Properties>
+        <Property name="LOG_HOME">/usr/local/applogs/hippo-integration-admin</Property>
+        <Property name="PROJECT_NAME">hippo-integration-admin</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss,SSS} l=%level [r=%X{rid}][s=%X{rstep}][t=%t][APP=${PROJECT_NAME}][c=%c{1.}]- %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingRandomAccessFile name="logfile" fileName="${LOG_HOME}/${PROJECT_NAME}.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+
+        <AsyncLogger name="org.change.hippo" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="logfile"/>
+        </AsyncLogger>
+
+        <AsyncRoot level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="logfile"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>

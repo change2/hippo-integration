@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">serviceId：</label>
+								<div class="col-sm-8">
+									<input id="serviceId" name="serviceId"
+										   class="form-control" type="text" placeholder="SERVICE ID...">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">domain：</label>
+								<div class="col-sm-8">
+									<label th:each="type,states:${clazz.domain}" class="radio-inline">
+										<input name="domain" type="radio" th:value="${type.name}"
+											   th:text=" ${type.name}" th:checked="${states.first}" >
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">服务类型：</label>
+								<div class="col-sm-8">
+									<label th:each="type,states:${clazz.serviceModel}" class="radio-inline">
+										<input name="serviceModel" type="radio" th:value="${type.value}"
+											   th:text=" ${type.name}" th:checked="${states.first}">
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">服务描述：</label>
+								<div class="col-sm-8">
+									<input id="serviceDesc" name="serviceDesc"
+										   class="form-control" type="text" placeholder="服务描述..." >
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">权限码：</label>
+								<div class="col-sm-8">
+									<label th:each="type,states:${clazz.actionType}" class="radio-inline">
+										<input name="actionType" type="radio" th:value="${type.value}"
+											   th:text=" ${type.name}" th:checked="${states.first}" >
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">是否登录：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+																		name="permission" value="1" checked="checked"/> 是
+									</label> <label class="radio-inline"> <input type="radio"
+																				 name="permission" value="0" /> 否
+								</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">是否记录日志：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+																		name="serviceLog" value="1" /> 是
+									</label> <label class="radio-inline"> <input type="radio"
+																				 name="serviceLog" value="0" checked="checked"/> 否
+								</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">是否发布：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+																		name="status" value="1" /> 是
+									</label> <label class="radio-inline"> <input type="radio"
+																				 name="status" value="0" checked="checked"/> 否
+								</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP PATH：</label>
+								<div class="col-sm-8">
+									<input id="path" name="path"
+										   class="form-control" type="text" placeholder="接口地址...">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP 参数校验：</label>
+								<div class="col-sm-8">
+									<input id="param" name="param"
+										   class="form-control" type="text" placeholder="参数校验...">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP 请求方式：</label>
+								<div class="col-sm-8">
+									<label th:each="type,states:${clazz.request}" class="radio-inline">
+										<input name="mode" type="radio" th:value="${type.value}"
+											   th:text=" ${type.name}" th:checked="${states.first}">
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">RPC 参数类型：</label>
+								<div class="col-sm-8">
+									<input id="argument" name="argument"
+										   class="form-control" type="text" placeholder="调用目标服务的参数类型...">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">RPC 接口类名：</label>
+								<div class="col-sm-8">
+									<input id="interfaze" name="interfaze"
+										   class="form-control" type="text" placeholder="目标地址的接口类名称">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">RPC 接口方法名：</label>
+								<div class="col-sm-8">
+									<input id="method" name="method"
+										   class="form-control" type="text" placeholder="目标服务的接口方法名...">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">限流速率(s)：</label>
+								<div class="col-sm-8">
+									<input id="replenishRate" name="replenishRate"
+										   class="form-control" type="text" placeholder="令牌桶填充平均速率..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">限流上限：</label>
+								<div class="col-sm-8">
+									<input id="burstCapacity" name="burstCapacity"
+										   class="form-control" type="text" placeholder="令牌桶上限..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断开关：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+																		name="circuitBreakerEnabled" value="1" /> 开
+									</label> <label class="radio-inline"> <input type="radio"
+																				 name="circuitBreakerEnabled" value="0"  checked="checked"/> 关
+								</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断时间窗：</label>
+								<div class="col-sm-8">
+									<input id="metricsRollingStatisticalWindowInMilliseconds" name="metricsRollingStatisticalWindowInMilliseconds"
+										   class="form-control" type="text" placeholder="统计滚动的时间窗口..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断半开状态：</label>
+								<div class="col-sm-8">
+									<input id="circuitBreakerSleepWindowInMilliseconds" name="circuitBreakerSleepWindowInMilliseconds"
+										   class="form-control" type="text" placeholder="当熔断器打开5s后进入半开状态，允许部分流量进来重试..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断阀值：</label>
+								<div class="col-sm-8">
+									<input id="circuitBreakerRequestVolumeThreshold" name="circuitBreakerRequestVolumeThreshold"
+										   class="form-control" type="text" placeholder="熔断器在整个统计时间内是否开启的阀值..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断错误率：</label>
+								<div class="col-sm-8">
+									<input id="circuitBreakerErrorThresholdPercentage" name="circuitBreakerErrorThresholdPercentage"
+										   class="form-control" type="text" placeholder="熔断打开最大错误率..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">最大并发数：</label>
+								<div class="col-sm-8">
+									<input id="executionIsolationSemaphoreMaxConcurrentRequests" name="executionIsolationSemaphoreMaxConcurrentRequests"
+										   class="form-control" type="text" placeholder="最大并发数..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">失败回滚：</label>
+								<div class="col-sm-8">
+									<input id="fallbackIsolationSemaphoreMaxConcurrentRequests" name="fallbackIsolationSemaphoreMaxConcurrentRequests"
+										   class="form-control" type="text" placeholder="失败回滚调用最大并发数..." value="0">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/common/service/add.js">
+	</script>
+</body>
+</html>

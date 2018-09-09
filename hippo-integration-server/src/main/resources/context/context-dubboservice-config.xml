@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dubboServiceConverter"
+          class="org.change.hippo.server.parser.strategy.DubboServiceConverter"/>
+
+    <bean id="dubboServiceParser" class="org.change.hippo.server.parser.file.PropertiesParser">
+        <property name="path" value="classpath:config/dubbo-service.properties"/>
+        <property name="serviceConverter" ref="dubboServiceConverter"/>
+    </bean>
+
+    <bean id="dubboServiceConfig"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="dubboServiceParser"/>
+        <property name="targetMethod" value="parse"/>
+    </bean>
+
+    <bean id="dubboServicePoolFactory"
+          class="org.change.hippo.server.factory.dubbo.DubboServicePoolFactory"/>
+
+    <bean id="dubboServicePool"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="dubboServicePoolFactory"/>
+        <property name="targetMethod" value="create"/>
+        <property name="arguments" ref="dubboServiceConfig"/>
+    </bean>
+
+</beans>

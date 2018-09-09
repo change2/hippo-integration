@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="springContextUtils" class="org.change.hippo.server.util.SpringContextUtils"/>
+    <bean id="servicePool" class="org.change.hippo.server.pool.ServicePoolMerger">
+		<constructor-arg>
+			<list>
+				<ref bean="hessianServicePool" />
+				<ref bean="soapServicePool" />
+				<ref bean="httpServicePool"/>
+				<ref bean="dubboServicePool"/>
+			</list>
+		</constructor-arg>
+	</bean>
+
+</beans>

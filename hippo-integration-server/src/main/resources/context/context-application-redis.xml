@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="1000"/>
+        <property name="maxIdle" value="500"/>
+        <property name="minIdle" value="100"/>
+        <property name="blockWhenExhausted" value="false"/>
+        <property name="maxWaitMillis" value="100"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="false"/>
+    </bean>
+
+    <bean id="jedisCluster" class="com.change.hippo.utils.redis.JedisClusterFactory">
+        <property name="clusters" value="${spring.redis.cluster.nodes}"/>
+        <property name="jedisPoolConfig" ref="jedisPoolConfig"/>
+        <property name="timeout" value="${spring.redis.cluster.timeout}"/>
+    </bean>
+
+</beans>

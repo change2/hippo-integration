@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="id" name="id" th:value="${service.id}"
+                               class="form-control" type="hidden">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">serviceId：</label>
+                            <div class="col-sm-8">
+                                <input id="serviceId" name="serviceId" th:value="${service.serviceId}"
+                                       class="form-control" type="text" placeholder="serviceId...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">domain：</label>
+                            <div class="col-sm-8">
+                                <label th:each="type:${clazz.domain}" class="radio-inline">
+                                    <input name="domain" type="radio" th:value="${type.name}"
+                                           th:text="${type.name}"  th:field="*{service.domain}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">服务类型：</label>
+                            <div class="col-sm-8">
+                                <label th:each="type:${clazz.serviceModel}" class="radio-inline">
+                                    <input name="serviceModel" type="radio" th:value="${type.value}"
+                                           th:text=" ${type.name}" th:field="*{service.serviceModel}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">服务描述：</label>
+                            <div class="col-sm-8">
+                                <input id="serviceDesc" name="serviceDesc" th:value="${service.serviceDesc}"
+                                       class="form-control" type="text" placeholder="服务描述...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">权限码：</label>
+                            <div class="col-sm-8">
+                                <label th:each="type:${clazz.actionType}" class="radio-inline">
+                                    <input name="actionType" type="radio" th:value="${type.value}"
+                                           th:text=" ${type.name}" th:field="*{service.actionType}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否登录：</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"> <input type="radio"
+                                                                    name="permission" value="1" th:field="*{service.permission}" /> 是
+                                </label> <label class="radio-inline"> <input type="radio"
+                                                                             name="permission" value="0" th:field="*{service.permission}" /> 否
+                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否记录日志：</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"> <input type="radio"
+                                                                    name="serviceLog" value="1" th:field="*{service.serviceLog}" /> 是
+                                </label> <label class="radio-inline"> <input type="radio"
+                                                                             name="serviceLog" value="0" th:field="*{service.serviceLog}" /> 否
+                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否发布：</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"> <input type="radio"
+                                                                    name="status" value="1" th:field="*{service.status}"/> 是
+                                </label> <label class="radio-inline"> <input type="radio"
+                                                                             name="status" value="0" th:field="*{service.status}"/> 否
+                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">HTTP PATH：</label>
+                            <div class="col-sm-8">
+                                <input id="path" name="path" th:value="${service.path}"
+                                       class="form-control" type="text" placeholder="接口地址...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">HTTP 参数校验：</label>
+                            <div class="col-sm-8">
+                                <input id="param" name="param" th:value="${service.param}"
+                                       class="form-control" type="text" placeholder="参数校验...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">HTTP 请求方式：</label>
+                            <div class="col-sm-8">
+                                <label th:each="type:${clazz.request}" class="radio-inline">
+                                    <input name="mode" type="radio" th:value="${type.value}"
+                                           th:text=" ${type.name}"  th:field="*{service.mode}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">RPC 参数类型：</label>
+                            <div class="col-sm-8">
+                                <input id="argument" name="argument" th:value="${service.argument}"
+                                       class="form-control" type="text" placeholder="调用目标服务的参数类型...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">RPC 接口类名：</label>
+                            <div class="col-sm-8">
+                                <input id="interfaze" name="interfaze" th:value="${service.interfaze}"
+                                       class="form-control" type="text" placeholder="目标地址的接口类名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">RPC 接口方法名：</label>
+                            <div class="col-sm-8">
+                                <input id="method" name="method" th:value="${service.method}"
+                                       class="form-control" type="text" placeholder="目标服务的接口方法名...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">限流速率(s)：</label>
+                            <div class="col-sm-8">
+                                <input id="replenishRate" name="replenishRate" th:value="${service.replenishRate}"
+                                       class="form-control" type="text" placeholder="令牌桶填充平均速率...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">限流上限：</label>
+                            <div class="col-sm-8">
+                                <input id="burstCapacity" name="burstCapacity" th:value="${service.burstCapacity}"
+                                       class="form-control" type="text" placeholder="令牌桶上限...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">熔断开关：</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"> <input type="radio"
+                                                                    name="circuitBreakerEnabled" value="1" th:field="*{service.circuitBreakerEnabled}" /> 开
+                                </label> <label class="radio-inline"> <input type="radio"
+                                                                             name="circuitBreakerEnabled" value="0" th:field="*{service.circuitBreakerEnabled}" /> 关
+                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">熔断时间窗：</label>
+                            <div class="col-sm-8">
+                                <input id="metricsRollingStatisticalWindowInMilliseconds" name="metricsRollingStatisticalWindowInMilliseconds"
+                                       th:value="${service.metricsRollingStatisticalWindowInMilliseconds}"
+                                       class="form-control" type="text" placeholder="统计滚动的时间窗口...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">熔断半开状态：</label>
+                            <div class="col-sm-8">
+                                <input id="circuitBreakerSleepWindowInMilliseconds" name="circuitBreakerSleepWindowInMilliseconds"
+                                       th:value="${service.circuitBreakerSleepWindowInMilliseconds}"
+                                       class="form-control" type="text" placeholder="当熔断器打开5s后进入半开状态，允许部分流量进来重试...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">熔断阀值：</label>
+                            <div class="col-sm-8">
+                                <input id="circuitBreakerRequestVolumeThreshold" name="circuitBreakerRequestVolumeThreshold"
+                                       th:value="${service.circuitBreakerRequestVolumeThreshold}"
+                                       class="form-control" type="text" placeholder="熔断器在整个统计时间内是否开启的阀值...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">熔断错误率：</label>
+                            <div class="col-sm-8">
+                                <input id="circuitBreakerErrorThresholdPercentage" name="circuitBreakerErrorThresholdPercentage"
+                                       th:value="${service.circuitBreakerErrorThresholdPercentage}"
+                                       class="form-control" type="text" placeholder="熔断打开最大错误率...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">最大并发数：</label>
+                            <div class="col-sm-8">
+                                <input id="executionIsolationSemaphoreMaxConcurrentRequests" name="executionIsolationSemaphoreMaxConcurrentRequests"
+                                       th:value="${service.executionIsolationSemaphoreMaxConcurrentRequests}"
+                                       class="form-control" type="text" placeholder="最大并发数...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">失败回滚：</label>
+                            <div class="col-sm-8">
+                                <input id="fallbackIsolationSemaphoreMaxConcurrentRequests" name="fallbackIsolationSemaphoreMaxConcurrentRequests"
+                                       th:value="${service.fallbackIsolationSemaphoreMaxConcurrentRequests}"
+                                       class="form-control" type="text" placeholder="失败回滚调用最大并发数...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="/js/appjs/common/service/edit.js">
+</script>
+</body>
+</html>

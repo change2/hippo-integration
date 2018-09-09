@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:apollo="http://www.ctrip.com/schema/apollo"
+       xmlns:int-http="http://www.springframework.org/schema/integration/http"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/http
+		http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+        http://www.ctrip.com/schema/apollo http://www.ctrip.com/schema/apollo.xsd">
+
+    <apollo:config order="10"/>
+    <int-http:inbound-gateway request-channel="requestChannel"
+                              reply-channel="responseChannel"
+                              error-channel="errorChannel"
+                              path="/http/gateway"
+                              supported-methods="POST"
+                              mapped-request-headers="X-*, HTTP_REQUEST_HEADERS"
+                              mapped-response-headers="X-*,HTTP_RESPONSE_HEADERS"
+                              merge-with-default-converters="true"
+                              message-converters="converters">
+        <int-http:request-mapping consumes="application/json" produces="application/json"/>
+    </int-http:inbound-gateway>
+
+    <bean id="converters" class="org.change.hippo.server.converter.ByteArrayToStringConverter"/>
+
+    <int:chain input-channel="requestChannel" output-channel="responseChannel">
+        <!-- 版本升级 -->
+        <int:filter id="versionFilter" discard-channel="versionDefined" ref="versionSelector"/>
+        <!-- 拦截请求头中的X_SERVICE_ID -->
+        <int:filter id="serviceIdFilter" discard-channel="selectIdDefined" ref="serviceIdSelector"/>
+        <!-- 设备类型验证 -->
+        <int:filter id="privilegeFilter" discard-channel="privilegeDefined" ref="privilegeSelector"/>
+        <!-- 签名验证 -->
+        <int:filter id="checkSumFilter" discard-channel="checkSumDefined" ref="checkSumSelector"/>
+        <!-- 用户是否登录拦截 -->
+        <int:filter id="userSessionFilter" discard-channel="userSessionDefined" ref="userSessionSelector"/>
+        <!-- 用户权限校验 -->
+        <int:filter id="checkAuthFilter" discard-channel="checkAuthDefined" ref="checkAuthSelector"/>
+        <!-- 参数校验 -->
+        <int:filter id="checkParamFilter" discard-channel="checkParamDefined" ref="checkParamSelector"/>
+        <!--限流-->
+        <int:filter id="rateLimiterFilter" discard-channel="checkRateLimiterDefined" ref="rateLimiterSelector"/>
+
+        <!-- 后台请求通道 -->
+        <int:service-activator method="handleMessage">
+            <bean class="org.change.hippo.server.activator.GatewayHandler">
+                <property name="servicePool" ref="servicePool"/>
+            </bean>
+        </int:service-activator>
+    </int:chain>
+    <bean id="versionSelector" class="org.change.hippo.server.selector.VersionSelector"/>
+    <bean id="serviceIdSelector" class="org.change.hippo.server.selector.ServiceIdSelector"/>
+    <bean id="privilegeSelector" class="org.change.hippo.server.selector.PrivilegeSelector"/>
+    <bean id="checkSumSelector" class="org.change.hippo.server.selector.CheckSumSelector">
+        <property name="environment" ref="environment"/>
+    </bean>
+    <bean id="userSessionSelector" class="org.change.hippo.server.selector.UserSessionSelector">
+        <property name="servicePool" ref="servicePool"/>
+    </bean>
+    <bean id="checkAuthSelector" class="org.change.hippo.server.selector.CheckAuthSelector">
+        <property name="servicePool" ref="servicePool"/>
+    </bean>
+    <bean id="checkParamSelector" class="org.change.hippo.server.selector.CheckParamSelector">
+        <property name="servicePool" ref="servicePool"/>
+    </bean>
+    <bean id="apolloConfig" class="org.change.hippo.server.apollo.ApolloConfig">
+        <property name="servicePool" ref="servicePool"/>
+    </bean>
+
+    <bean id="rateLimiterSelector" class="org.change.hippo.server.selector.CheckRateLimiterSelector">
+        <property name="servicePool" ref="servicePool"/>
+    </bean>
+
+    <int:channel id="requestChannel">
+        <int:interceptors>
+            <bean class="org.change.hippo.server.interceptor.RequestInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:channel id="responseChannel">
+        <int:interceptors>
+            <bean class="org.change.hippo.server.interceptor.ResponseInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+
+    <!-- 错误通道-->
+    <int:channel id="errorChannel"/>
+    <!-- 版本升级 -->
+    <int:channel id="versionDefined"/>
+    <!-- 设备类型验证 -->
+    <int:channel id="privilegeDefined"/>
+    <!-- selectId -->
+    <int:channel id="selectIdDefined"/>
+    <!-- 签名验证 -->
+    <int:channel id="checkSumDefined"/>
+    <!-- 无session -->
+    <int:channel id="userSessionDefined"/>
+    <!-- 权限不足 -->
+    <int:channel id="checkAuthDefined"/>
+    <!-- 参数验证 -->
+    <int:channel id="checkParamDefined"/>
+    <!-- 限流 -->
+    <int:channel id="checkRateLimiterDefined"/>
+
+    <int:transformer input-channel="errorChannel" ref="exceptionTransformer" method="buildErrorResponse"/>
+
+    <bean id="exceptionTransformer" class="org.change.hippo.server.transformer.ExceptionTransformer"/>
+
+    <bean id="versionTransformer" class="org.change.hippo.server.transformer.VersionTransformer" />
+
+    <!-- 版本升级通道-->
+    <int:chain input-channel="versionDefined" output-channel="responseChannel">
+        <int:transformer ref="versionTransformer" method="buildVersionResponse"/>
+    </int:chain>
+
+    <!-- 设备类型校验错误 -->
+    <int:chain input-channel="privilegeDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="999"/>
+            <int:header name="error_Msg" value="未认证设备！"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+
+    <!-- md5摘要算法校验错误-->
+    <int:chain input-channel="checkSumDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="999"/>
+            <int:header name="error_Msg" value="请求数据已被篡改"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+
+    <!-- userSession 无效-->
+    <int:chain input-channel="userSessionDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="998"/>
+            <int:header name="error_Msg" value="登录已过期，请重新登录"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+
+    <!-- check auth 无效-->
+    <int:chain input-channel="checkAuthDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="999"/>
+            <int:header name="error_Msg" value="您没有操作权限"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+
+    <!-- check param 无效-->
+    <int:chain input-channel="checkParamDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="999"/>
+            <int:header name="error_Msg" value="请求数据格式不正确"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+
+    <!-- check redis limiter 无效-->
+    <int:chain input-channel="checkRateLimiterDefined" output-channel="responseChannel">
+        <int:header-enricher>
+            <int:header name="error_Code" value="999"/>
+            <int:header name="error_Msg" value="服务器开小差了,请稍后重试！"/>
+        </int:header-enricher>
+        <int:transformer ref="exceptionTransformer" method="buildRefusedResponse"/>
+    </int:chain>
+</beans>

@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.change.hippo.admin.mapper.SdnServiceMapper">
+    <resultMap id="BaseResultMap" type="com.change.hippo.admin.entity.SdnServiceEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+        <result column="service_desc" jdbcType="VARCHAR" property="serviceDesc" />
+        <result column="service_model" jdbcType="VARCHAR" property="serviceModel" />
+        <result column="service_log" jdbcType="BIT" property="serviceLog" />
+        <result column="domain" jdbcType="VARCHAR" property="domain" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="param" jdbcType="VARCHAR" property="param" />
+        <result column="mode" jdbcType="VARCHAR" property="mode" />
+        <result column="action_type" jdbcType="VARCHAR" property="actionType" />
+        <result column="permission" jdbcType="BIT" property="permission" />
+        <result column="argument" jdbcType="VARCHAR" property="argument" />
+        <result column="interfaze" jdbcType="VARCHAR" property="interfaze" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="replenishRate" jdbcType="BIGINT" property="replenishRate" />
+        <result column="burstCapacity" jdbcType="BIGINT" property="burstCapacity" />
+        <result column="circuitBreakerEnabled" jdbcType="BIT" property="circuitBreakerEnabled" />
+        <result column="metricsRollingStatisticalWindowInMilliseconds" jdbcType="BIGINT" property="metricsRollingStatisticalWindowInMilliseconds" />
+        <result column="circuitBreakerSleepWindowInMilliseconds" jdbcType="BIGINT" property="circuitBreakerSleepWindowInMilliseconds" />
+        <result column="circuitBreakerRequestVolumeThreshold" jdbcType="BIGINT" property="circuitBreakerRequestVolumeThreshold" />
+        <result column="circuitBreakerErrorThresholdPercentage" jdbcType="BIGINT" property="circuitBreakerErrorThresholdPercentage" />
+        <result column="executionIsolationSemaphoreMaxConcurrentRequests" jdbcType="BIGINT" property="executionIsolationSemaphoreMaxConcurrentRequests" />
+        <result column="fallbackIsolationSemaphoreMaxConcurrentRequests" jdbcType="BIGINT" property="fallbackIsolationSemaphoreMaxConcurrentRequests" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, service_id, service_desc, service_model, service_log, domain, path, param, mode,
+    action_type, permission, argument, interfaze, method, replenishRate, burstCapacity,
+    circuitBreakerEnabled, metricsRollingStatisticalWindowInMilliseconds, circuitBreakerSleepWindowInMilliseconds,
+    circuitBreakerRequestVolumeThreshold, circuitBreakerErrorThresholdPercentage, executionIsolationSemaphoreMaxConcurrentRequests,
+    fallbackIsolationSemaphoreMaxConcurrentRequests, status, create_by, update_by, create_time,
+    update_time
+  </sql>
+    <select id="get" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdn_service_config
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdn_service_config
+        <where>
+
+            <if test="serviceId != null and serviceId != ''">
+                and ( service_id like "%"#{serviceId}"%" or service_desc like "%"#{serviceId}"%"
+                or domain like "%"#{serviceId}"%" or service_model like "%"#{serviceId}"%" )
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from sdn_service_config
+        <where>
+            <if test="serviceId != null and serviceId != ''">
+                and ( service_id like "%"#{serviceId}"%" or service_desc like "%"#{serviceId}"%"
+                or domain like "%"#{serviceId}"%" or service_model like "%"#{serviceId}"%" )
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sdn_service_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="batchRemove">
+        delete from sdn_service_config where id in
+        <foreach item="id" collection="array" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.change.hippo.admin.entity.SdnServiceEntity">
+    insert into sdn_service_config (id, service_id, service_desc,
+      service_model, service_log, domain,
+      path, param, mode,
+      action_type, permission, argument,
+      interfaze, method, replenishRate,
+      burstCapacity, circuitBreakerEnabled, metricsRollingStatisticalWindowInMilliseconds,
+      circuitBreakerSleepWindowInMilliseconds, circuitBreakerRequestVolumeThreshold,
+      circuitBreakerErrorThresholdPercentage, executionIsolationSemaphoreMaxConcurrentRequests,
+      fallbackIsolationSemaphoreMaxConcurrentRequests, status,
+      create_by, update_by, create_time,
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{serviceId,jdbcType=VARCHAR}, #{serviceDesc,jdbcType=VARCHAR},
+      #{serviceModel,jdbcType=VARCHAR}, #{serviceLog,jdbcType=BIT}, #{domain,jdbcType=VARCHAR},
+      #{path,jdbcType=VARCHAR}, #{param,jdbcType=VARCHAR}, #{mode,jdbcType=VARCHAR},
+      #{actionType,jdbcType=VARCHAR}, #{permission,jdbcType=BIT}, #{argument,jdbcType=VARCHAR},
+      #{interfaze,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{replenishRate,jdbcType=BIGINT},
+      #{burstCapacity,jdbcType=BIGINT}, #{circuitBreakerEnabled,jdbcType=BIT}, #{metricsRollingStatisticalWindowInMilliseconds,jdbcType=BIGINT},
+      #{circuitBreakerSleepWindowInMilliseconds,jdbcType=BIGINT}, #{circuitBreakerRequestVolumeThreshold,jdbcType=BIGINT},
+      #{circuitBreakerErrorThresholdPercentage,jdbcType=BIGINT}, #{executionIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+      #{fallbackIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT}, #{status,jdbcType=BIT},
+      #{createBy,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.change.hippo.admin.entity.SdnServiceEntity">
+        insert into sdn_service_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="serviceId != null">
+                service_id,
+            </if>
+            <if test="serviceDesc != null">
+                service_desc,
+            </if>
+            <if test="serviceModel != null">
+                service_model,
+            </if>
+            <if test="serviceLog != null">
+                service_log,
+            </if>
+            <if test="domain != null">
+                domain,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+            <if test="param != null">
+                param,
+            </if>
+            <if test="mode != null">
+                mode,
+            </if>
+            <if test="actionType != null">
+                action_type,
+            </if>
+            <if test="permission != null">
+                permission,
+            </if>
+            <if test="argument != null">
+                argument,
+            </if>
+            <if test="interfaze != null">
+                interfaze,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="replenishRate != null">
+                replenishRate,
+            </if>
+            <if test="burstCapacity != null">
+                burstCapacity,
+            </if>
+            <if test="circuitBreakerEnabled != null">
+                circuitBreakerEnabled,
+            </if>
+            <if test="metricsRollingStatisticalWindowInMilliseconds != null">
+                metricsRollingStatisticalWindowInMilliseconds,
+            </if>
+            <if test="circuitBreakerSleepWindowInMilliseconds != null">
+                circuitBreakerSleepWindowInMilliseconds,
+            </if>
+            <if test="circuitBreakerRequestVolumeThreshold != null">
+                circuitBreakerRequestVolumeThreshold,
+            </if>
+            <if test="circuitBreakerErrorThresholdPercentage != null">
+                circuitBreakerErrorThresholdPercentage,
+            </if>
+            <if test="executionIsolationSemaphoreMaxConcurrentRequests != null">
+                executionIsolationSemaphoreMaxConcurrentRequests,
+            </if>
+            <if test="fallbackIsolationSemaphoreMaxConcurrentRequests != null">
+                fallbackIsolationSemaphoreMaxConcurrentRequests,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="serviceId != null">
+                #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceDesc != null">
+                #{serviceDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceModel != null">
+                #{serviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLog != null">
+                #{serviceLog,jdbcType=BIT},
+            </if>
+            <if test="domain != null">
+                #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="param != null">
+                #{param,jdbcType=VARCHAR},
+            </if>
+            <if test="mode != null">
+                #{mode,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null">
+                #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                #{permission,jdbcType=BIT},
+            </if>
+            <if test="argument != null">
+                #{argument,jdbcType=VARCHAR},
+            </if>
+            <if test="interfaze != null">
+                #{interfaze,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="replenishRate != null">
+                #{replenishRate,jdbcType=BIGINT},
+            </if>
+            <if test="burstCapacity != null">
+                #{burstCapacity,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerEnabled != null">
+                #{circuitBreakerEnabled,jdbcType=BIT},
+            </if>
+            <if test="metricsRollingStatisticalWindowInMilliseconds != null">
+                #{metricsRollingStatisticalWindowInMilliseconds,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerSleepWindowInMilliseconds != null">
+                #{circuitBreakerSleepWindowInMilliseconds,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerRequestVolumeThreshold != null">
+                #{circuitBreakerRequestVolumeThreshold,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerErrorThresholdPercentage != null">
+                #{circuitBreakerErrorThresholdPercentage,jdbcType=BIGINT},
+            </if>
+            <if test="executionIsolationSemaphoreMaxConcurrentRequests != null">
+                #{executionIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+            </if>
+            <if test="fallbackIsolationSemaphoreMaxConcurrentRequests != null">
+                #{fallbackIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.change.hippo.admin.entity.SdnServiceEntity">
+        update sdn_service_config
+        <set>
+            <if test="serviceId != null">
+                service_id = #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceDesc != null">
+                service_desc = #{serviceDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceModel != null">
+                service_model = #{serviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLog != null">
+                service_log = #{serviceLog,jdbcType=BIT},
+            </if>
+            <if test="domain != null">
+                domain = #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="param != null">
+                param = #{param,jdbcType=VARCHAR},
+            </if>
+            <if test="mode != null">
+                mode = #{mode,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null">
+                action_type = #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                permission = #{permission,jdbcType=BIT},
+            </if>
+            <if test="argument != null">
+                argument = #{argument,jdbcType=VARCHAR},
+            </if>
+            <if test="interfaze != null">
+                interfaze = #{interfaze,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="replenishRate != null">
+                replenishRate = #{replenishRate,jdbcType=BIGINT},
+            </if>
+            <if test="burstCapacity != null">
+                burstCapacity = #{burstCapacity,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerEnabled != null">
+                circuitBreakerEnabled = #{circuitBreakerEnabled,jdbcType=BIT},
+            </if>
+            <if test="metricsRollingStatisticalWindowInMilliseconds != null">
+                metricsRollingStatisticalWindowInMilliseconds = #{metricsRollingStatisticalWindowInMilliseconds,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerSleepWindowInMilliseconds != null">
+                circuitBreakerSleepWindowInMilliseconds = #{circuitBreakerSleepWindowInMilliseconds,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerRequestVolumeThreshold != null">
+                circuitBreakerRequestVolumeThreshold = #{circuitBreakerRequestVolumeThreshold,jdbcType=BIGINT},
+            </if>
+            <if test="circuitBreakerErrorThresholdPercentage != null">
+                circuitBreakerErrorThresholdPercentage = #{circuitBreakerErrorThresholdPercentage,jdbcType=BIGINT},
+            </if>
+            <if test="executionIsolationSemaphoreMaxConcurrentRequests != null">
+                executionIsolationSemaphoreMaxConcurrentRequests = #{executionIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+            </if>
+            <if test="fallbackIsolationSemaphoreMaxConcurrentRequests != null">
+                fallbackIsolationSemaphoreMaxConcurrentRequests = #{fallbackIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.change.hippo.admin.entity.SdnServiceEntity">
+    update sdn_service_config
+    set service_id = #{serviceId,jdbcType=VARCHAR},
+      service_desc = #{serviceDesc,jdbcType=VARCHAR},
+      service_model = #{serviceModel,jdbcType=VARCHAR},
+      service_log = #{serviceLog,jdbcType=BIT},
+      domain = #{domain,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      param = #{param,jdbcType=VARCHAR},
+      mode = #{mode,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=BIT},
+      argument = #{argument,jdbcType=VARCHAR},
+      interfaze = #{interfaze,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      replenishRate = #{replenishRate,jdbcType=BIGINT},
+      burstCapacity = #{burstCapacity,jdbcType=BIGINT},
+      circuitBreakerEnabled = #{circuitBreakerEnabled,jdbcType=BIT},
+      metricsRollingStatisticalWindowInMilliseconds = #{metricsRollingStatisticalWindowInMilliseconds,jdbcType=BIGINT},
+      circuitBreakerSleepWindowInMilliseconds = #{circuitBreakerSleepWindowInMilliseconds,jdbcType=BIGINT},
+      circuitBreakerRequestVolumeThreshold = #{circuitBreakerRequestVolumeThreshold,jdbcType=BIGINT},
+      circuitBreakerErrorThresholdPercentage = #{circuitBreakerErrorThresholdPercentage,jdbcType=BIGINT},
+      executionIsolationSemaphoreMaxConcurrentRequests = #{executionIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+      fallbackIsolationSemaphoreMaxConcurrentRequests = #{fallbackIsolationSemaphoreMaxConcurrentRequests,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIT},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

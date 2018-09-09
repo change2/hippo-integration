@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="hessianServiceConverter"
+		class="org.change.hippo.server.parser.strategy.HessianServiceConverter"></bean>
+
+	<bean id="hessianServiceParser" class="org.change.hippo.server.parser.file.PropertiesParser">
+		<property name="path" value="classpath:config/hessian-service.properties"></property>
+		<property name="serviceConverter" ref="hessianServiceConverter"></property>
+	</bean>
+
+	<bean id="hessianServiceConfig"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="hessianServiceParser"></property>
+		<property name="targetMethod" value="parse"></property>
+	</bean>
+
+	<bean id="hessianServicePoolFactory"
+		class="org.change.hippo.server.factory.hessian.HessianServicePoolFactory"></bean>
+
+	<bean id="hessianServicePool"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="hessianServicePoolFactory"></property>
+		<property name="targetMethod" value="create"></property>
+		<property name="arguments" ref="hessianServiceConfig"></property>
+	</bean>
+
+</beans>

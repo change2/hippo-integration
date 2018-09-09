@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="mysqlDatabaseParser" class="org.change.hippo.server.parser.database.MySQLParser">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+
+    <bean id="dbServicePoolFactory" class="org.change.hippo.server.factory.db.CompositeServicePoolFactory" init-method="init">
+        <property name="servicePool" ref="servicePool"/>
+        <property name="serviceDefinedMap" ref="serviceDefinedMap"/>
+    </bean>
+
+    <bean id="serviceEndpoint" class="org.change.hippo.server.impl.ServiceEndpoint">
+        <property name="servicePoolFactory" ref="dbServicePoolFactory"/>
+        <property name="servicePoolMerger" ref="servicePool"/>
+    </bean>
+
+
+    <bean id="serviceDefinedMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+        <property name="targetMapClass" value="java.util.concurrent.ConcurrentHashMap"/>
+        <property name="sourceMap">
+            <map>
+                <entry key="DubboServiceConfig" value="org.change.hippo.server.service.dubbo.DubboService"/>
+                <entry key="HttpConfig" value="org.change.hippo.server.service.http.HttpService"/>
+                <entry key="HessianServiceConfig" value="org.change.hippo.server.service.hessian.HessianService"/>
+                <entry key="SoapServiceConfig" value="org.change.hippo.server.service.soap.SoapService"/>
+            </map>
+        </property>
+    </bean>
+</beans>

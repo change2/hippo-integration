@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">serviceId：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.serviceId}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">domain：</label>
+								<div class="col-sm-8">
+								  <input class="form-control" th:value="${definition.domain}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">服务类型：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.serviceModel}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">服务描述：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.serviceDesc}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">权限码：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.actionType}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">是否登录：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.permission}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">是否记录日志：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.serviceLog}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP PATH：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.path}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP 参数校验：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.param}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">HTTP/RPC 方法：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.method}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">RPC 参数类型：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.argument}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">RPC 接口类名：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.interfaze}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">限流速率(s)：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.replenishRate}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">限流上限：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.burstCapacity}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断开关：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.circuitBreakerEnabled}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断时间窗：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.metricsRollingStatisticalWindowInMilliseconds}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断半开状态：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.circuitBreakerSleepWindowInMilliseconds}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断阀值：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.circuitBreakerRequestVolumeThreshold}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">熔断错误率：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.circuitBreakerErrorThresholdPercentage}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">最大并发数：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.executionIsolationSemaphoreMaxConcurrentRequests}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">失败回滚：</label>
+								<div class="col-sm-8">
+									<input class="form-control" th:value="${definition.fallbackIsolationSemaphoreMaxConcurrentRequests}" type="text">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+</body>
+</html>
