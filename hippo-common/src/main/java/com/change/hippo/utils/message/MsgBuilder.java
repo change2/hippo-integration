@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * 适配common提供的Msg类
- * @author:fulong
- * @create:2017/7/29 11:16.
  */
 public class MsgBuilder {
 

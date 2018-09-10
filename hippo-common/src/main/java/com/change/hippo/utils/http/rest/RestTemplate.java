@@ -16,8 +16,6 @@ import java.util.Set;
 
 /**
  * Rest工具
- * @author:fulong
- * @create:2017/8/4 11:48.
  */
 public class RestTemplate {
 

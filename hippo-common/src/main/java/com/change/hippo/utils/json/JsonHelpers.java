@@ -11,8 +11,6 @@ import java.util.Map;
 /**
  * 采用阿里开源的fastjson
  * <p>原有的common-utils包中已存在json工具包，采用的是google的Gson</p>
- * @author:fulong
- * @create:2017/8/1 15:40.
  */
 public class JsonHelpers {
 

@@ -9,8 +9,6 @@ import java.util.Random;
  *
  * ID生成器
  *
- * @author:fulong
- * @create:2017/9/11 15:03.
  */
 @Component("idGenerator")
 public class IdGenerator {

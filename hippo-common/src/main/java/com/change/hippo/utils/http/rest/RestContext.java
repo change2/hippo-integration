@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author:fulong
- * @create:2017/8/4 11:53.
  */
 public class RestContext implements Serializable {
 

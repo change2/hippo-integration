@@ -8,8 +8,6 @@ import com.change.hippo.utils.message.MsgBuilder;
 /**
  * 默认的转换器
  *
- * @author:fulong
- * @create:2018/2/8 11:43.
  */
 public class DefaultRestAdapter implements RestAdapter {
     /**

@@ -16,3 +16,19 @@ hippo 是个基于spring message 框架写的一个开源的api网关，他能�
 -  支持spring cloud服务转发
 -  接口编排（DSL实现）
 -  支持grpc服务转发
+
+
+
+# hippo common功能列表
+- 基于Retrofit、feign实现httpclient请求
+- 基于redis cluster实现分布式锁，防重复
+- 简化kafka消费，提供手动、自动提交offset
+- 简化配置redis,其中包括redis单节点、redis cluster
+- 订单号生成【基于数据库】
+- 简化配置spring mvc，支持全局拦截错误，错误信息可配置，可动态加载
+- 分布式链路跟踪，基于log4j2的MDC实现，目前支持http、dubbo、kafka，多线程
+
+# hippo integration admin 功能列表
+- 动态填写接口配置到hippo integration server中
+- 菜单权限管理
+

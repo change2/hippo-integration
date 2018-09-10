@@ -3,8 +3,6 @@ package com.change.hippo.utils.reflect;
 /**
  * 反射自定义异常
  *
- * @author:fulong
- * @create:2017/8/6 16:27.
  */
 public class ReflectException extends RuntimeException {
 

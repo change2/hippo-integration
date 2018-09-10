@@ -15,8 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 /**
  *
  *
- * @author:fulong
- * @create:2017/8/6 16:27.
  */
 public class ReflectHelper {
 

@@ -6,8 +6,6 @@ import com.change.hippo.utils.message.Msg;
 /**
  * Rest 转换消息成标准的Msg对象
  *
- * @author:fulong
- * @create:2018/2/8 9:47.
  */
 public interface RestAdapter {
 
