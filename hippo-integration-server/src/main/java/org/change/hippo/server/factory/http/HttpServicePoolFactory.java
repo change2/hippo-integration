@@ -29,7 +29,7 @@ public class HttpServicePoolFactory implements ServicePoolFactory<HttpService> {
     private ApolloConfig apolloConfig;
     private List<ServiceConfig> configs;
     @Override
-    public ServicePool create(List<ServiceConfig> configs) throws Exception {
+    public HttpServicePool create(List<ServiceConfig> configs) throws Exception {
         if (configs == null || configs.isEmpty()) {
             return null;
         }

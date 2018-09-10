@@ -16,7 +16,7 @@ import java.util.List;
 public class DubboServicePoolFactory implements ServicePoolFactory<DubboService> {
 
     @Override
-    public ServicePool create(List configs) throws Exception {
+    public DubboServicePool create(List configs) throws Exception {
         if (configs == null || configs.isEmpty()) {
             return null;
         }

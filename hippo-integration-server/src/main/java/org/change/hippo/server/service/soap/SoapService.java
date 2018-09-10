@@ -30,6 +30,7 @@ public class SoapService extends AbstractService<SoapServiceConfig> {
 
 		JaxWsPortProxyFactoryBean jaxWsPortProxyFactoryBean = new JaxWsPortProxyFactoryBean();
 		jaxWsPortProxyFactoryBean.setServiceInterface(interfaze);
+        jaxWsPortProxyFactoryBean.setServiceName("12123");
 		jaxWsPortProxyFactoryBean.setWsdlDocumentUrl(new URL(serviceConfig.getUrl()));
 		jaxWsPortProxyFactoryBean.afterPropertiesSet();
 

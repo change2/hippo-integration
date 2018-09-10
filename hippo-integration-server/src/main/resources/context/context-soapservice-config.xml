@@ -4,24 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="soapServiceConverter" class="org.change.hippo.server.parser.strategy.SoapServiceConverter"></bean>
-
-	<bean id="soapServiceParser" class="org.change.hippo.server.parser.file.PropertiesParser">
-		<property name="path" value="classpath:config/soap-service.properties"></property>
-		<property name="serviceConverter" ref="soapServiceConverter"></property>
-	</bean>
-
-	<bean id="soapServiceConfig" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="soapServiceParser"></property>
-		<property name="targetMethod" value="parse"></property>
-	</bean>
-
-	<bean id="soapServicePoolFactory" class="org.change.hippo.server.factory.soap.SoapServicePoolFactory"></bean>
-
-	<bean id="soapServicePool" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="soapServicePoolFactory"></property>
-		<property name="targetMethod" value="create"></property>
-		<property name="arguments" ref="soapServiceConfig"></property>
-	</bean>
-
+    <bean id="soapServicePool" class="org.change.hippo.server.factory.soap.SoapServicePoolFactoryBean">
+        <property name="path" value="classpath:config/soap-service.properties"></property>
+    </bean>
 </beans>
